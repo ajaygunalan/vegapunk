@@ -1,0 +1,867 @@
+{
+  "table_of_contents": [
+    {
+      "title": "Implicit Contact Diffuser: Sequential Contact Reasoning\nwith Latent Point Cloud Diffusion",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          106.5,
+          72.75
+        ],
+        [
+          505.6171875,
+          72.75
+        ],
+        [
+          505.6171875,
+          107.4111328125
+        ],
+        [
+          106.5,
+          107.4111328125
+        ]
+      ]
+    },
+    {
+      "title": "I. INTRODUCTION",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          135.75,
+          345.75
+        ],
+        [
+          216.0,
+          345.75
+        ],
+        [
+          216.0,
+          355.39453125
+        ],
+        [
+          135.75,
+          355.39453125
+        ]
+      ]
+    },
+    {
+      "title": "II. RELATED WORK",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          132.0,
+          54.0
+        ],
+        [
+          219.0,
+          54.0
+        ],
+        [
+          219.0,
+          64.388671875
+        ],
+        [
+          132.0,
+          64.388671875
+        ]
+      ]
+    },
+    {
+      "title": "A. 3D Representation for Object Manipulation",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          52.5,
+          69.0
+        ],
+        [
+          246.75,
+          69.0
+        ],
+        [
+          246.75,
+          79.3740234375
+        ],
+        [
+          52.5,
+          79.3740234375
+        ]
+      ]
+    },
+    {
+      "title": "B. Contact Reasoning for Robot Manipulation",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          52.5,
+          210.75
+        ],
+        [
+          245.25,
+          210.75
+        ],
+        [
+          245.25,
+          220.81640625
+        ],
+        [
+          52.5,
+          220.81640625
+        ]
+      ]
+    },
+    {
+      "title": "C. Diffusion Models for Robotics",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          52.5,
+          459.75
+        ],
+        [
+          192.0,
+          459.75
+        ],
+        [
+          192.0,
+          469.08984375
+        ],
+        [
+          52.5,
+          469.08984375
+        ]
+      ]
+    },
+    {
+      "title": "D. Long-horizon reasoning for robot manipulation",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          52.5,
+          672.0
+        ],
+        [
+          263.25,
+          672.0
+        ],
+        [
+          263.25,
+          682.171875
+        ],
+        [
+          52.5,
+          682.171875
+        ]
+      ]
+    },
+    {
+      "title": "III. PRELIMINARIES",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          388.4765625,
+          201.75
+        ],
+        [
+          479.25,
+          201.75
+        ],
+        [
+          479.25,
+          211.1484375
+        ],
+        [
+          388.4765625,
+          211.1484375
+        ]
+      ]
+    },
+    {
+      "title": "A. Problem Statement",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          311.25,
+          222.75
+        ],
+        [
+          404.61328125,
+          222.75
+        ],
+        [
+          404.61328125,
+          232.224609375
+        ],
+        [
+          311.25,
+          232.224609375
+        ]
+      ]
+    },
+    {
+      "title": "B. Diffusion Models",
+      "heading_level": null,
+      "page_id": 2,
+      "polygon": [
+        [
+          52.5,
+          253.494140625
+        ],
+        [
+          138.0,
+          253.494140625
+        ],
+        [
+          138.0,
+          262.5
+        ],
+        [
+          52.5,
+          262.5
+        ]
+      ]
+    },
+    {
+      "title": "IV. METHOD",
+      "heading_level": null,
+      "page_id": 2,
+      "polygon": [
+        [
+          146.25,
+          444.75
+        ],
+        [
+          205.5,
+          444.75
+        ],
+        [
+          205.5,
+          453.62109375
+        ],
+        [
+          146.25,
+          453.62109375
+        ]
+      ]
+    },
+    {
+      "title": "A. Contact-aware Neural Descriptor Field",
+      "heading_level": null,
+      "page_id": 2,
+      "polygon": [
+        [
+          52.5,
+          588.75
+        ],
+        [
+          228.75,
+          588.75
+        ],
+        [
+          228.75,
+          597.8671875
+        ],
+        [
+          52.5,
+          597.8671875
+        ]
+      ]
+    },
+    {
+      "title": "B. Implicit Contact Diffuser",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [
+          52.5,
+          382.5
+        ],
+        [
+          170.25,
+          382.5
+        ],
+        [
+          170.25,
+          391.74609375
+        ],
+        [
+          52.5,
+          391.74609375
+        ]
+      ]
+    },
+    {
+      "title": "C. MPPI with Neural Contact Subgoals",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          52.5,
+          279.75
+        ],
+        [
+          219.0,
+          279.75
+        ],
+        [
+          219.0,
+          289.65234375
+        ],
+        [
+          52.5,
+          289.65234375
+        ]
+      ]
+    },
+    {
+      "title": "V. EXPERIMENTS",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          137.25,
+          634.5
+        ],
+        [
+          214.5,
+          634.5
+        ],
+        [
+          214.5,
+          643.88671875
+        ],
+        [
+          137.25,
+          643.88671875
+        ]
+      ]
+    },
+    {
+      "title": "A. Simulation Experiments",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          311.25,
+          204.75
+        ],
+        [
+          424.5,
+          204.75
+        ],
+        [
+          424.5,
+          214.048828125
+        ],
+        [
+          311.25,
+          214.048828125
+        ]
+      ]
+    },
+    {
+      "title": "B. Implementation Details",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          311.25,
+          504.66796875
+        ],
+        [
+          422.25,
+          504.66796875
+        ],
+        [
+          422.25,
+          513.94921875
+        ],
+        [
+          311.25,
+          513.94921875
+        ]
+      ]
+    },
+    {
+      "title": "C. Physical Demonstration",
+      "heading_level": null,
+      "page_id": 5,
+      "polygon": [
+        [
+          312.0,
+          337.798828125
+        ],
+        [
+          427.32421875,
+          337.798828125
+        ],
+        [
+          427.32421875,
+          348.626953125
+        ],
+        [
+          312.0,
+          348.626953125
+        ]
+      ]
+    },
+    {
+      "title": "VI. CONCLUSION AND FUTURE WORK",
+      "heading_level": null,
+      "page_id": 5,
+      "polygon": [
+        [
+          351.75,
+          526.7109375
+        ],
+        [
+          519.9609375,
+          526.7109375
+        ],
+        [
+          519.9609375,
+          537.5390625
+        ],
+        [
+          351.75,
+          537.5390625
+        ]
+      ]
+    },
+    {
+      "title": "REFERENCES",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          147.75,
+          54.75
+        ],
+        [
+          205.4443359375,
+          54.75
+        ],
+        [
+          205.4443359375,
+          63.5185546875
+        ],
+        [
+          147.75,
+          63.5185546875
+        ]
+      ]
+    }
+  ],
+  "page_stats": [
+    {
+      "page_id": 0,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          213
+        ],
+        [
+          "Line",
+          95
+        ],
+        [
+          "Text",
+          11
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "Footnote",
+          1
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 1,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          326
+        ],
+        [
+          "Line",
+          108
+        ],
+        [
+          "Text",
+          8
+        ],
+        [
+          "SectionHeader",
+          7
+        ],
+        [
+          "TextInlineMath",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 2,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          615
+        ],
+        [
+          "Line",
+          112
+        ],
+        [
+          "TextInlineMath",
+          5
+        ],
+        [
+          "Text",
+          4
+        ],
+        [
+          "SectionHeader",
+          3
+        ],
+        [
+          "Equation",
+          2
+        ],
+        [
+          "Reference",
+          2
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 3,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          697
+        ],
+        [
+          "Line",
+          110
+        ],
+        [
+          "TextInlineMath",
+          8
+        ],
+        [
+          "Equation",
+          3
+        ],
+        [
+          "Text",
+          2
+        ],
+        [
+          "Reference",
+          2
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 4,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          544
+        ],
+        [
+          "Line",
+          109
+        ],
+        [
+          "TableCell",
+          35
+        ],
+        [
+          "Text",
+          7
+        ],
+        [
+          "SectionHeader",
+          4
+        ],
+        [
+          "TextInlineMath",
+          3
+        ],
+        [
+          "Reference",
+          3
+        ],
+        [
+          "Caption",
+          2
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Equation",
+          1
+        ],
+        [
+          "Table",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ],
+        [
+          "TableGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 5,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          276
+        ],
+        [
+          "Line",
+          98
+        ],
+        [
+          "Text",
+          9
+        ],
+        [
+          "TableCell",
+          9
+        ],
+        [
+          "Caption",
+          4
+        ],
+        [
+          "Picture",
+          2
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "PictureGroup",
+          2
+        ],
+        [
+          "Reference",
+          2
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "TextInlineMath",
+          1
+        ],
+        [
+          "Table",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ],
+        [
+          "TableGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 6,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          520
+        ],
+        [
+          "Line",
+          148
+        ],
+        [
+          "ListItem",
+          44
+        ],
+        [
+          "ListGroup",
+          2
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "Text",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 7,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          266
+        ],
+        [
+          "Line",
+          80
+        ],
+        [
+          "ListItem",
+          22
+        ],
+        [
+          "Text",
+          3
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    }
+  ],
+  "debug_data_path": "debug_data/implicit_contact_diffuser"
+}

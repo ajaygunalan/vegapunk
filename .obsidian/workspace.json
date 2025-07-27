@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "e84d710ab7dd899b",
+    "type": "split",
+    "children": [
+      {
+        "id": "428b941ac8c29f65",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ece275bb50807164",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "output/your_vit_is_secretly_a_hybrid_discriminativegenera/algorithm_overview.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "algorithm_overview"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a5443d32a97be374",
+    "type": "split",
+    "children": [
+      {
+        "id": "a0e5ee2728ca74c1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "671a6371b662c827",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "d8c726bf88c4db94",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "8fb69313b9056b33",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 211.500732421875
+  },
+  "right": {
+    "id": "daa11aecf37119bf",
+    "type": "split",
+    "children": [
+      {
+        "id": "f579e95121c6784e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d759eea2851e68c1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "output/collisionaffording_point_trees_simdamenable_neares/CollisionCheck.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for CollisionCheck"
+            }
+          },
+          {
+            "id": "c1e44c529001d7a9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "output/collisionaffording_point_trees_simdamenable_neares/CollisionCheck.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from CollisionCheck"
+            }
+          },
+          {
+            "id": "ecf7cfeedc2266dc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "8fadb24c9cf035e7",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "output/collisionaffording_point_trees_simdamenable_neares/CollisionCheck.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of CollisionCheck"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "ece275bb50807164",
+  "lastOpenFiles": [
+    "ε-greedy explore.md",
+    "Untitled.md",
+    "Untitled 1.md",
+    "utils/run_all_papers.py",
+    "utils/pdf_extract.sh",
+    "utils",
+    "templates/node_query.yml",
+    "templates/algorithm_step.yml",
+    "templates/algorithm_overview.yml",
+    "templates",
+    "src/paper2code.py",
+    "src",
+    "requirements.txt",
+    "output/leveraging_post_hoc_context_for_faster_learning_in/analyze_raw.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/ComputeLoss.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/ClassificationForward.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/Reconstruction.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeConditionedMLP.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeConditionedMSA.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/PatchEmbedding.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeEmbedding.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/analyze_raw.md",
+    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/algorithm_overview.md",
+    "output/selfadapting_language_models/RLUpdate.md",
+    "output/selfadapting_language_models/ComputeReward.md",
+    "output/selfadapting_language_models/Evaluate.md",
+    "output/selfadapting_language_models/InnerLoopUpdate.md",
+    "output/selfadapting_language_models/GenerateSelfEdit.md",
+    "output/selfadapting_language_models/SampleTask.md",
+    "output/selfadapting_language_models/analyze_raw.md",
+    "output/selfadapting_language_models/algorithm_overview.md",
+    "output/robotic_manipulation_by_imitating_generated_videos/ClosedLoopExecution.md",
+    "output/robotic_manipulation_by_imitating_generated_videos/GraspAndRetarget.md",
+    "output/robotic_manipulation_by_imitating_generated_videos/Track6DObjectPose.md",
+    "output/robotic_manipulation_by_imitating_generated_videos/IdentifyActiveObject.md",
+    "output/robotic_manipulation_by_imitating_generated_videos/FilterVideo.md"
+  ]
+}

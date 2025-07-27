@@ -1,0 +1,11 @@
+# User prompt for AnalyzeNode - provides paper content only
+user_prompt: |
+  Extract all algorithmic nodes from this paper and format according to the template.
+  
+  IMPORTANT: 
+  - Every distinct computational step or algorithm is a "node"
+  - This includes: Algorithm 1, Algorithm 2, Step 1, subroutines, strategies, etc.
+  - Show relationships between nodes (sequential, parallel, calls, choices)
+  
+  PAPER CONTENT:
+  {paper_content}

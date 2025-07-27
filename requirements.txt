@@ -1,0 +1,26 @@
+# Core Dependencies
+langchain>=0.3.0
+langchain-community
+langchain-openai
+langchain-anthropic
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# API Communication
+httpx>=0.27.0  # For Perplexity API calls
+
+# Vector/Semantic Search (for Weave)
+chromadb>=0.5.0
+
+# Graph Processing (for Spark)
+networkx>=3.3
+
+# CLI Enhancement
+rich>=13.0.0
+click>=8.1.0
+
+# Utilities
+tiktoken>=0.7.0  # For token counting with OpenAI
+
+# Note: Perplexity API might need a specific client
+# Add when package name is confirmed
