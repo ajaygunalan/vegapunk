@@ -1,20 +1,18 @@
 """Paper2Code flow using PocketFlow"""
 
 from pocketflow import AsyncFlow
-from nodes import IdentifyNode, AnalyzeNode, QueryNode, ResearchNode
+from nodes import BuildOverview, ProcessNode
 
 
 def create_paper2code_flow():
-    """Creates the 4-node Paper2Code pipeline"""
+    """Creates the 2-node Paper2Code pipeline"""
     
     # Instantiate nodes
-    identify = IdentifyNode()
-    analyze = AnalyzeNode()
-    query = QueryNode()
-    research = ResearchNode()  # AsyncParallelBatchNode for parallel execution
+    build = BuildOverview()
+    process = ProcessNode()  # Runs N parallel pipelines
     
     # Chain nodes
-    identify >> analyze >> query >> research
+    build >> process
     
     # Create async flow since we have async nodes
-    return AsyncFlow(start=identify)
+    return AsyncFlow(start=build)
