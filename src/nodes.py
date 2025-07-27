@@ -3,131 +3,99 @@
 import os
 import re
 import yaml
-import asyncio
 import aiohttp
 import time
 from pathlib import Path
-from openai import OpenAI
 from pocketflow import Node, AsyncParallelBatchNode
 
 import config
-
-# Paths
-BASE_DIR = Path(__file__).parent.parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-PROMPTS_DIR = BASE_DIR / "prompts"
+from utils.llm import call_openai, call_openai_async
 
 
 def load_yaml_field(filepath: Path, field: str) -> str:
-    """Load specific field from YAML file"""
+    """Load specific field from YAML file.
+    
+    Args:
+        filepath: Path to YAML file
+        field: Field name to extract
+        
+    Returns:
+        The value of the specified field
+    """
     with open(filepath) as f:
         return yaml.safe_load(f)[field]
 
 
-async def call_openai(prompt: str, model: str = config.OPENAI_MODEL) -> str:
-    """Make OpenAI API call"""
-    client = OpenAI(api_key=os.getenv(config.OPENAI_API_KEY))
-    response = await asyncio.to_thread(
-        client.chat.completions.create,
-        model=model,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response.choices[0].message.content
+def sanitize_filename(name: str) -> str:
+    """Sanitize a string to be used as a filename.
+    
+    Args:
+        name: The string to sanitize
+        
+    Returns:
+        A sanitized string safe for use as a filename
+    """
+    return name.replace('/', '-').replace('\\', '-').replace(':', '-')
 
 
 class BuildOverview(Node):
-    """Build algorithm overview incrementally through 3 focused steps"""
+    """Generate complete algorithm overview in a single API call.
+    
+    This node:
+    1. Loads the algorithm overview template
+    2. Calls OpenAI to generate a complete overview with Mermaid diagram
+    3. Extracts and validates the nodes list and algorithm name
+    4. Saves the overview to output directory
+    """
     
     def prep(self, shared):
-        print("\n📚 BuildOverview: Starting 3-step overview generation...")
+        print("\n📚 BuildOverview: Generating complete algorithm overview...")
         shared["build_start"] = time.time()
         return shared["paper_content"]
     
     def exec(self, paper_content):
-        # Step 1: Generate Math Model
-        print("  📐 Step 1: Generating mathematical model...")
-        math_template = load_yaml_field(TEMPLATES_DIR / 'math_model.md', 'math_model_template')
-        math_prompt = load_yaml_field(PROMPTS_DIR / 'generate_math_model.md', 'prompt').format(
+        # Load template and prompt
+        template = load_yaml_field(config.TEMPLATES_DIR / 'algorithm_overview_v2.md', 'algorithm_overview_template')
+        prompt = load_yaml_field(config.PROMPTS_DIR / 'generate_overview.md', 'prompt').format(
             paper_content=paper_content,
-            math_model_template=math_template
+            template=template
         )
         
-        client = OpenAI(api_key=os.getenv(config.OPENAI_API_KEY))
-        math_response = client.chat.completions.create(
-            model=config.OPENAI_MODEL,
-            messages=[{"role": "user", "content": math_prompt}]
-        )
-        math_content = math_response.choices[0].message.content
+        # Single API call using centralized function
+        content = call_openai(prompt, max_tokens=4000)
         
-        # Extract nodes list from response
-        nodes_match = re.search(r'NODES:\s*\n(.*?)$', math_content, re.DOTALL)
-        if nodes_match:
-            nodes_text = nodes_match.group(1).strip()
-            # Extract node names from bullet list
-            nodes_list = []
-            for line in nodes_text.split('\n'):
-                line = line.strip()
-                if line.startswith('- '):
-                    nodes_list.append(line[2:].strip())
-            math_overview = math_content[:nodes_match.start()].strip()
-        else:
-            raise ValueError("Failed to extract nodes list from math model response")
+        # Validate response is not empty
+        if not content or not content.strip():
+            raise ValueError("LLM returned empty response")
         
-        # Extract algorithm name from math overview
-        algorithm_name = math_overview.split('\n')[0].replace('##', '').strip()
+        # Extract nodes from new format: 1. [[Node Name]] - description
+        nodes_list = re.findall(r'^\d+\.\s*\[\[(.*?)\]\]', content, re.MULTILINE)
         
-        # Step 2: Generate Pipeline
-        print("  🔗 Step 2: Generating pipeline and data flow...")
-        pipeline_template = load_yaml_field(TEMPLATES_DIR / 'pipeline.md', 'pipeline_template')
-        pipeline_prompt = load_yaml_field(PROMPTS_DIR / 'generate_pipeline.md', 'prompt').format(
-            algorithm_name=algorithm_name,
-            nodes_list=', '.join(nodes_list),
-            paper_content=paper_content,
-            pipeline_template=pipeline_template
-        )
+        # Validate we found nodes
+        if not nodes_list:
+            raise ValueError("Failed to extract nodes from LLM response. Expected format: '1. [[Node Name]]'")
         
-        pipeline_response = client.chat.completions.create(
-            model=config.OPENAI_MODEL,
-            messages=[{"role": "user", "content": pipeline_prompt}]
-        )
-        pipeline_overview = pipeline_response.choices[0].message.content
+        # Extract algorithm name
+        lines = content.split('\n')
+        algorithm_name = lines[0].replace('##', '').strip() if lines else "Unknown Algorithm"
         
-        # Step 3: Generate Node Details
-        print("  📝 Step 3: Generating detailed node descriptions...")
-        node_details_template = load_yaml_field(TEMPLATES_DIR / 'node_details.md', 'node_details_template')
-        node_details_prompt = load_yaml_field(PROMPTS_DIR / 'generate_node_details.md', 'prompt').format(
-            algorithm_name=algorithm_name,
-            nodes_list=', '.join(nodes_list),
-            math_overview=math_overview,
-            pipeline_overview=pipeline_overview,
-            paper_content=paper_content,
-            node_details_template=node_details_template
-        )
-        
-        node_details_response = client.chat.completions.create(
-            model=config.OPENAI_MODEL,
-            messages=[{"role": "user", "content": node_details_prompt}]
-        )
-        node_details = node_details_response.choices[0].message.content
+        # Validate algorithm name
+        if not algorithm_name or algorithm_name == "Unknown Algorithm":
+            raise ValueError("Failed to extract algorithm name from response")
         
         return {
-            "math_overview": math_overview,
-            "pipeline_overview": pipeline_overview,
-            "node_details": node_details,
+            "content": content,
             "nodes_list": nodes_list,
             "algorithm_name": algorithm_name
         }
     
     def post(self, shared, prep_res, exec_res):
-        # Assemble final algorithm overview
+        # Save complete algorithm overview
         output_dir = shared["output_dir"]
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Combine all sections
-        final_overview = f"{exec_res['math_overview']}\n\n{exec_res['pipeline_overview']}\n\n{exec_res['node_details']}"
-        
-        # Save algorithm overview
-        (output_dir / "algorithm_overview.md").write_text(final_overview)
+        # Save the complete content
+        (output_dir / "algorithm_overview.md").write_text(exec_res['content'])
         
         # Store nodes for ProcessNode
         shared["nodes"] = [{"name": name, "description": ""} for name in exec_res['nodes_list']]
@@ -139,7 +107,15 @@ class BuildOverview(Node):
 
 
 class ProcessNode(AsyncParallelBatchNode):
-    """Process all nodes in parallel - each gets its own query->research pipeline"""
+    """Process all nodes in parallel - each gets its own query->research pipeline.
+    
+    This node:
+    1. Takes the list of nodes from BuildOverview
+    2. For each node in parallel:
+       - Generates a research query using OpenAI
+       - Researches the query using Perplexity API
+    3. Saves each researched node as a separate markdown file
+    """
     
     async def prep_async(self, shared):
         print(f"\n🚀 ProcessNode: Launching {len(shared['nodes'])} parallel pipelines...")
@@ -153,14 +129,15 @@ class ProcessNode(AsyncParallelBatchNode):
         # Step 1: Generate query
         print(f"   🔍 Generating query for: {node['name']}")
         
-        query_template = load_yaml_field(TEMPLATES_DIR / 'node_query.md', 'node_query_template')
-        prompt = load_yaml_field(PROMPTS_DIR / 'query.md', 'prompt').format(
+        query_template = load_yaml_field(config.TEMPLATES_DIR / 'node_query.md', 'node_query_template')
+        prompt = load_yaml_field(config.PROMPTS_DIR / 'query.md', 'prompt').format(
             node_name=node['name'],
             node_description=node['description'],
             query_template=query_template
         )
         
-        query_text = await call_openai(prompt)
+        # Generate query using async centralized function for parallel execution
+        query_text = await call_openai_async(prompt)
         if "Query: |" in query_text:
             query_text = query_text.split("Query: |")[1].strip()
         
@@ -168,14 +145,14 @@ class ProcessNode(AsyncParallelBatchNode):
         print(f"   🚀 Started researching: {node['name']}")
         start_time = time.time()
         
-        step_template = load_yaml_field(TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
-        research_prompt = load_yaml_field(PROMPTS_DIR / 'research.md', 'prompt').format(
+        step_template = load_yaml_field(config.TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
+        research_prompt = load_yaml_field(config.PROMPTS_DIR / 'research.md', 'prompt').format(
             query=query_text,
             step_template=step_template
         )
         
         headers = {
-            "Authorization": f"Bearer {os.getenv(config.PERPLEXITY_API_KEY)}",
+            "Authorization": f"Bearer {os.getenv('PERPLEXITY_API_KEY')}",
             "Content-Type": "application/json"
         }
         
@@ -212,7 +189,7 @@ class ProcessNode(AsyncParallelBatchNode):
         for result in exec_res_list:
             if result:
                 # Sanitize filename
-                safe_name = result['name'].replace('/', '-').replace('\\', '-').replace(':', '-')
+                safe_name = sanitize_filename(result['name'])
                 (output_dir / f"{safe_name}.md").write_text(result['content'])
                 saved_nodes.append(result['name'])
         

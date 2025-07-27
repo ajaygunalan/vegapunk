@@ -7,9 +7,9 @@ from nodes import BuildOverview, ProcessNode
 def create_paper2code_flow():
     """Creates the 2-node Paper2Code pipeline"""
     
-    # Instantiate nodes
-    build = BuildOverview()
-    process = ProcessNode()  # Runs N parallel pipelines
+    # Instantiate nodes with retry configuration
+    build = BuildOverview(max_retries=3, wait=10)
+    process = ProcessNode(max_retries=3, wait=10)  # AsyncParallelBatchNode - runs N parallel pipelines
     
     # Chain nodes
     build >> process

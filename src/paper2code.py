@@ -13,9 +13,7 @@ load_dotenv()
 
 # Import the flow
 from flow import create_paper2code_flow
-
-# Paths
-BASE_DIR = Path(__file__).parent.parent
+from config import BASE_DIR
 
 
 def extract_paper_name(paper_path: Path) -> str:
