@@ -24,3 +24,6 @@ tiktoken>=0.7.0  # For token counting with OpenAI
 
 # Note: Perplexity API might need a specific client
 # Add when package name is confirmed
+
+# Flow Framework
+pocketflow
