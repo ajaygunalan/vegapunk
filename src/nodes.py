@@ -98,12 +98,11 @@ class BuildOverview(Node):
         (output_dir / "algorithm_overview.md").write_text(exec_res['content'])
         
         # Store nodes for ProcessNode
-        shared["nodes"] = [{"name": name, "description": ""} for name in exec_res['nodes_list']]
+        shared["nodes"] = [{"name": name} for name in exec_res['nodes_list']]
         shared["algorithm_name"] = exec_res['algorithm_name']
         
         duration = time.time() - shared["build_start"]
         print(f"✅ BuildOverview: Completed in {duration:.1f}s with {len(exec_res['nodes_list'])} nodes")
-
 
 
 class ProcessNode(AsyncParallelBatchNode):
@@ -132,7 +131,7 @@ class ProcessNode(AsyncParallelBatchNode):
         query_template = load_yaml_field(config.TEMPLATES_DIR / 'node_query.md', 'node_query_template')
         prompt = load_yaml_field(config.PROMPTS_DIR / 'query.md', 'prompt').format(
             node_name=node['name'],
-            node_description=node['description'],
+            node_description="",  # Not used, kept for template compatibility
             query_template=query_template
         )
         
@@ -180,7 +179,7 @@ class ProcessNode(AsyncParallelBatchNode):
                     print(f"   ❌ Error researching {node['name']}: {response.status}")
                     return None
     
-    async def post_async(self, shared, prep_res, exec_res_list):
+    async def post_async(self, shared, _, exec_res_list):
         # Collect and save all results
         saved_nodes = []
         output_dir = shared["output_dir"]

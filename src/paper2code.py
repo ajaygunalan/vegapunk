@@ -61,13 +61,12 @@ async def main():
     
     # Summary
     total_time = time.time() - start_time
-    print("\n✅ Pipeline completed successfully!")
-    print(f"\n📊 Results:")
-    print(f"  - Algorithm overview saved")
-    print(f"  - Researched {len(shared['researched_nodes'])} nodes")
-    
-    print(f"\n⏱️  Total time: {total_time:.1f}s")
-    print(f"📁 All outputs saved to: {output_dir}/")
+    print(f"\n✅ Pipeline completed successfully!\n"
+          f"\n📊 Results:\n"
+          f"  - Algorithm overview saved\n"
+          f"  - Researched {len(shared['researched_nodes'])} nodes\n"
+          f"\n⏱️  Total time: {total_time:.1f}s\n"
+          f"📁 All outputs saved to: {output_dir}/")
 
 
 if __name__ == "__main__":
