@@ -52,8 +52,8 @@ done
 ## Directory Structure
 ```
 ├── src/paper2code.py     # Main algorithm extraction
-├── templates/            # YAML templates for prompts
-├── prompts/             # System and user prompts
+├── templates/            # Markdown templates for prompts
+├── prompts/             # Markdown system and user prompts
 ├── input/
 │   ├── pdf/             # Source PDFs
 │   └── markdown/        # Extracted markdown

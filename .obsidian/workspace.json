@@ -13,12 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "output/your_vit_is_secretly_a_hybrid_discriminativegenera/algorithm_overview.md",
+                "file": "improvement_plan.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "algorithm_overview"
+              "title": "improvement_plan"
+            }
+          },
+          {
+            "id": "7b68b7a5c1164e13",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Untitled.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Untitled"
             }
           }
         ]
@@ -78,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 211.500732421875
+    "width": 211.500732421875,
+    "collapsed": true
   },
   "right": {
     "id": "daa11aecf37119bf",
@@ -170,41 +185,43 @@
   },
   "active": "ece275bb50807164",
   "lastOpenFiles": [
-    "ε-greedy explore.md",
     "Untitled.md",
-    "Untitled 1.md",
-    "utils/run_all_papers.py",
-    "utils/pdf_extract.sh",
-    "utils",
-    "templates/node_query.yml",
-    "templates/algorithm_step.yml",
-    "templates/algorithm_overview.yml",
-    "templates",
-    "src/paper2code.py",
-    "src",
-    "requirements.txt",
-    "output/leveraging_post_hoc_context_for_faster_learning_in/analyze_raw.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/ComputeLoss.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/ClassificationForward.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/Reconstruction.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeConditionedMLP.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeConditionedMSA.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/PatchEmbedding.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/TimeEmbedding.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/analyze_raw.md",
-    "output/your_vit_is_secretly_a_hybrid_discriminativegenera/algorithm_overview.md",
-    "output/selfadapting_language_models/RLUpdate.md",
-    "output/selfadapting_language_models/ComputeReward.md",
-    "output/selfadapting_language_models/Evaluate.md",
-    "output/selfadapting_language_models/InnerLoopUpdate.md",
-    "output/selfadapting_language_models/GenerateSelfEdit.md",
-    "output/selfadapting_language_models/SampleTask.md",
-    "output/selfadapting_language_models/analyze_raw.md",
+    "improvement_plan.md",
+    "improvement_plan.md.tmp.4393.1753626627193",
+    "improvement_plan.md.tmp.4393.1753626617456",
+    "improvement_plan.md.tmp.4393.1753626604448",
+    "improvement_plan.md.tmp.4393.1753626492145",
+    "improvement_plan.md.tmp.4393.1753626385658",
+    "improvement_plan.md.tmp.4393.1753626279417",
+    "improvement_plan.md.tmp.4393.1753626161411",
+    "improvement_plan.md.tmp.4393.1753626141474",
+    "improvement_plan.md.tmp.4393.1753626113753",
+    "improvement_plan.md.tmp.4393.1753626076828",
+    "README.md",
+    "other_repos_for_inspiration/blog.md",
+    "scratchpad_blog_fixes.md",
     "output/selfadapting_language_models/algorithm_overview.md",
-    "output/robotic_manipulation_by_imitating_generated_videos/ClosedLoopExecution.md",
-    "output/robotic_manipulation_by_imitating_generated_videos/GraspAndRetarget.md",
-    "output/robotic_manipulation_by_imitating_generated_videos/Track6DObjectPose.md",
-    "output/robotic_manipulation_by_imitating_generated_videos/IdentifyActiveObject.md",
-    "output/robotic_manipulation_by_imitating_generated_videos/FilterVideo.md"
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/index.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/design.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/index.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/08_agentlogger___monitor.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/07_agenttype.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/06_pythonexecutor.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/05_prompttemplates.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/04_agentmemory.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/03_tool.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/02_model_interface.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/SmolaAgents/01_multistepagent.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/index.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/08_hook_system.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/07_transport_adapters.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/06_exception_hierarchy.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/05_authentication_handlers.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/04_cookie_jar.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/03_session.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/docs/Requests/02_request___response_models.md",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/assets/youtube_thumbnail.png",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/assets/example.png",
+    "other_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/assets/banner.png"
   ]
 }

@@ -36,12 +36,12 @@ class AnalyzeNode:
     
     def run(self, paper_content: str, output_dir: Path) -> str:
         """Extract algorithm nodes from paper"""
-        system_prompt = load_yaml_field(PROMPTS_DIR / 'analyze_system_prompt.yml', 'system_prompt').format(
-            overview_template=load_yaml_field(TEMPLATES_DIR / 'algorithm_overview.yml', 'algorithm_overview_template'),
-            query_template=load_yaml_field(TEMPLATES_DIR / 'node_query.yml', 'node_query_template')
+        system_prompt = load_yaml_field(PROMPTS_DIR / 'analyze_system_prompt.md', 'system_prompt').format(
+            overview_template=load_yaml_field(TEMPLATES_DIR / 'algorithm_overview.md', 'algorithm_overview_template'),
+            query_template=load_yaml_field(TEMPLATES_DIR / 'node_query.md', 'node_query_template')
         )
         
-        user_prompt = load_yaml_field(PROMPTS_DIR / 'analyze_user_prompt.yml', 'user_prompt').format(
+        user_prompt = load_yaml_field(PROMPTS_DIR / 'analyze_user_prompt.md', 'user_prompt').format(
             paper_content=paper_content
         )
         
@@ -71,9 +71,9 @@ class ResearchNode:
         
     async def research_node(self, name: str, query: str, session: aiohttp.ClientSession) -> dict:
         """Research single node"""
-        step_template = load_yaml_field(TEMPLATES_DIR / 'algorithm_step.yml', 'algorithm_step_template')
-        system_prompt = load_yaml_field(PROMPTS_DIR / 'research_system_prompt.yml', 'system_prompt')
-        user_prompt = load_yaml_field(PROMPTS_DIR / 'research_user_prompt.yml', 'user_prompt').format(
+        step_template = load_yaml_field(TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
+        system_prompt = load_yaml_field(PROMPTS_DIR / 'research_system_prompt.md', 'system_prompt')
+        user_prompt = load_yaml_field(PROMPTS_DIR / 'research_user_prompt.md', 'user_prompt').format(
             query=query,
             step_template=step_template
         )
