@@ -8,8 +8,12 @@ import time
 from pathlib import Path
 from pocketflow import Node, AsyncParallelBatchNode
 
-import config
-from utils.llm import call_openai, call_openai_async
+from utils.llm import call_llm, call_llm_async
+
+# Perplexity settings
+PERPLEXITY_MODEL = "sonar"
+PERPLEXITY_TIMEOUT = 120
+PERPLEXITY_URL = "https://api.perplexity.ai/chat/completions"
 
 
 def load_yaml_field(filepath: Path, field: str) -> str:
@@ -55,14 +59,15 @@ class BuildOverview(Node):
     
     def exec(self, paper_content):
         # Load template and prompt
-        template = load_yaml_field(config.TEMPLATES_DIR / 'algorithm_overview_v2.md', 'algorithm_overview_template')
-        prompt = load_yaml_field(config.PROMPTS_DIR / 'generate_overview.md', 'prompt').format(
+        base_dir = Path(__file__).parent.parent
+        template = load_yaml_field(base_dir / 'templates' / 'algorithm_overview_v2.md', 'algorithm_overview_template')
+        prompt = load_yaml_field(base_dir / 'prompts' / 'generate_overview.md', 'prompt').format(
             paper_content=paper_content,
             template=template
         )
         
         # Single API call using centralized function
-        content = call_openai(prompt, max_tokens=4000)
+        content = call_llm(prompt, max_tokens=4000)
         
         # Validate response is not empty
         if not content or not content.strip():
@@ -128,15 +133,16 @@ class ProcessNode(AsyncParallelBatchNode):
         # Step 1: Generate query
         print(f"   🔍 Generating query for: {node['name']}")
         
-        query_template = load_yaml_field(config.TEMPLATES_DIR / 'node_query.md', 'node_query_template')
-        prompt = load_yaml_field(config.PROMPTS_DIR / 'query.md', 'prompt').format(
+        base_dir = Path(__file__).parent.parent
+        query_template = load_yaml_field(base_dir / 'templates' / 'node_query.md', 'node_query_template')
+        prompt = load_yaml_field(base_dir / 'prompts' / 'query.md', 'prompt').format(
             node_name=node['name'],
             node_description="",  # Not used, kept for template compatibility
             query_template=query_template
         )
         
         # Generate query using async centralized function for parallel execution
-        query_text = await call_openai_async(prompt)
+        query_text = await call_llm_async(prompt)
         if "Query: |" in query_text:
             query_text = query_text.split("Query: |")[1].strip()
         
@@ -144,8 +150,9 @@ class ProcessNode(AsyncParallelBatchNode):
         print(f"   🚀 Started researching: {node['name']}")
         start_time = time.time()
         
-        step_template = load_yaml_field(config.TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
-        research_prompt = load_yaml_field(config.PROMPTS_DIR / 'research.md', 'prompt').format(
+        base_dir = Path(__file__).parent.parent
+        step_template = load_yaml_field(base_dir / 'templates' / 'algorithm_step.md', 'algorithm_step_template')
+        research_prompt = load_yaml_field(base_dir / 'prompts' / 'research.md', 'prompt').format(
             query=query_text,
             step_template=step_template
         )
@@ -156,16 +163,16 @@ class ProcessNode(AsyncParallelBatchNode):
         }
         
         payload = {
-            "model": config.PERPLEXITY_MODEL,
+            "model": PERPLEXITY_MODEL,
             "messages": [{"role": "user", "content": research_prompt}]
         }
         
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                config.PERPLEXITY_URL,
+                PERPLEXITY_URL,
                 headers=headers,
                 json=payload,
-                timeout=aiohttp.ClientTimeout(total=config.PERPLEXITY_TIMEOUT)
+                timeout=aiohttp.ClientTimeout(total=PERPLEXITY_TIMEOUT)
             ) as response:
                 if response.status == 200:
                     data = await response.json()

@@ -13,7 +13,6 @@ load_dotenv()
 
 # Import the flow
 from flow import create_paper2code_flow
-from config import BASE_DIR
 
 
 def extract_paper_name(paper_path: Path) -> str:
@@ -41,7 +40,7 @@ async def main():
     # Get paper name from path
     paper_name = extract_paper_name(paper_path)
     
-    output_dir = BASE_DIR / "output" / paper_name
+    output_dir = Path(__file__).parent.parent / "output" / paper_name
     paper_content = paper_path.read_text()
     
     print(f"📚 Processing: {paper_path}")
