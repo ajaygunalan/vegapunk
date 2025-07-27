@@ -17,5 +17,9 @@ prompt: |
   - Block equations: Use $$ on separate lines
   - Focus on the PRIMARY mathematical model/equation
   
-  Also return a JSON list of all major algorithmic nodes/components you identify:
-  {{"nodes": ["Node Name 1", "Node Name 2", ...]}}
+  At the end, list all major algorithmic nodes/components using this format:
+  
+  NODES:
+  - Node Name 1
+  - Node Name 2
+  - Node Name 3

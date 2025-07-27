@@ -18,6 +18,17 @@ from flow import create_paper2code_flow
 BASE_DIR = Path(__file__).parent.parent
 
 
+def extract_paper_name(paper_path: Path) -> str:
+    """Extract paper name from path"""
+    # Try to find test_samples in path
+    parts = paper_path.parts
+    for i, part in enumerate(parts):
+        if part == "test_samples" and i + 1 < len(parts):
+            return parts[i + 1]
+    # Fallback to stem
+    return paper_path.stem
+
+
 async def main():
     """Main entry point using PocketFlow"""
     if len(sys.argv) < 2:
@@ -30,8 +41,7 @@ async def main():
         sys.exit(1)
     
     # Get paper name from path
-    paper_name = next((paper_path.parts[i+1] for i, p in enumerate(paper_path.parts) 
-                      if p == "test_samples" and i+1 < len(paper_path.parts)), paper_path.stem)
+    paper_name = extract_paper_name(paper_path)
     
     output_dir = BASE_DIR / "output" / paper_name
     paper_content = paper_path.read_text()

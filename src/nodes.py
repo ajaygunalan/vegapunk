@@ -2,14 +2,15 @@
 
 import os
 import re
-import json
 import yaml
 import asyncio
 import aiohttp
 import time
 from pathlib import Path
 from openai import OpenAI
-from pocketflow import Node, BatchNode, AsyncNode, AsyncParallelBatchNode, AsyncFlow
+from pocketflow import Node, AsyncParallelBatchNode
+
+import config
 
 # Paths
 BASE_DIR = Path(__file__).parent.parent
@@ -23,6 +24,17 @@ def load_yaml_field(filepath: Path, field: str) -> str:
         return yaml.safe_load(f)[field]
 
 
+async def call_openai(prompt: str, model: str = config.OPENAI_MODEL) -> str:
+    """Make OpenAI API call"""
+    client = OpenAI(api_key=os.getenv(config.OPENAI_API_KEY))
+    response = await asyncio.to_thread(
+        client.chat.completions.create,
+        model=model,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content
+
+
 class BuildOverview(Node):
     """Build algorithm overview incrementally through 3 focused steps"""
     
@@ -32,8 +44,6 @@ class BuildOverview(Node):
         return shared["paper_content"]
     
     def exec(self, paper_content):
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        
         # Step 1: Generate Math Model
         print("  📐 Step 1: Generating mathematical model...")
         math_template = load_yaml_field(TEMPLATES_DIR / 'math_model.md', 'math_model_template')
@@ -42,17 +52,23 @@ class BuildOverview(Node):
             math_model_template=math_template
         )
         
+        client = OpenAI(api_key=os.getenv(config.OPENAI_API_KEY))
         math_response = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=config.OPENAI_MODEL,
             messages=[{"role": "user", "content": math_prompt}]
         )
         math_content = math_response.choices[0].message.content
         
         # Extract nodes list from response
-        nodes_match = re.search(r'\{"nodes":\s*\[(.*?)\]\}', math_content, re.DOTALL)
+        nodes_match = re.search(r'NODES:\s*\n(.*?)$', math_content, re.DOTALL)
         if nodes_match:
-            nodes_str = nodes_match.group(1)
-            nodes_list = [n.strip().strip('"') for n in nodes_str.split(',')]
+            nodes_text = nodes_match.group(1).strip()
+            # Extract node names from bullet list
+            nodes_list = []
+            for line in nodes_text.split('\n'):
+                line = line.strip()
+                if line.startswith('- '):
+                    nodes_list.append(line[2:].strip())
             math_overview = math_content[:nodes_match.start()].strip()
         else:
             raise ValueError("Failed to extract nodes list from math model response")
@@ -71,7 +87,7 @@ class BuildOverview(Node):
         )
         
         pipeline_response = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=config.OPENAI_MODEL,
             messages=[{"role": "user", "content": pipeline_prompt}]
         )
         pipeline_overview = pipeline_response.choices[0].message.content
@@ -89,7 +105,7 @@ class BuildOverview(Node):
         )
         
         node_details_response = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=config.OPENAI_MODEL,
             messages=[{"role": "user", "content": node_details_prompt}]
         )
         node_details = node_details_response.choices[0].message.content
@@ -121,115 +137,6 @@ class BuildOverview(Node):
         print(f"✅ BuildOverview: Completed in {duration:.1f}s with {len(exec_res['nodes_list'])} nodes")
 
 
-class GenerateQueryNode(AsyncNode):
-    """Generate research question for one node"""
-    
-    async def prep_async(self, shared):
-        # The node is passed as params from ProcessNode
-        return self.params
-    
-    async def exec_async(self, node_data):
-        # Extract node from params
-        node = node_data['node']
-        
-        print(f"   🔍 Generating query for: {node['name']}")
-        
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        
-        # Load query template
-        query_template = load_yaml_field(TEMPLATES_DIR / 'node_query.md', 'node_query_template')
-        
-        # Load and format prompt
-        prompt = load_yaml_field(PROMPTS_DIR / 'query.md', 'prompt').format(
-            node_name=node['name'],
-            node_description=node['description'],
-            query_template=query_template
-        )
-        
-        # Use async create (OpenAI SDK supports async)
-        response = await asyncio.to_thread(
-            client.chat.completions.create,
-            model="gpt-4.1-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-        
-        # Extract query text
-        query_text = response.choices[0].message.content
-        if "Query: |" in query_text:
-            query_text = query_text.split("Query: |")[1].strip()
-        
-        return query_text
-    
-    async def post_async(self, shared, prep_res, exec_res):
-        # Store query and node info in shared for next node
-        shared["query"] = exec_res
-        shared["node"] = prep_res["node"]
-        shared["output_dir"] = shared.get("output_dir")  # Pass through output_dir
-
-
-class ResearchQueryNode(AsyncNode):
-    """Research single query using Perplexity"""
-    
-    async def prep_async(self, shared):
-        # Get data from previous node
-        return {
-            "name": shared["node"]["name"],
-            "query": shared["query"]
-        }
-    
-    async def exec_async(self, item):
-        """Research single query"""
-        name = item["name"]
-        query = item["query"]
-        
-        print(f"   🚀 Started researching: {name}")
-        start_time = time.time()
-        
-        # Load templates and prompts
-        step_template = load_yaml_field(TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
-        prompt = load_yaml_field(PROMPTS_DIR / 'research.md', 'prompt').format(
-            query=query,
-            step_template=step_template
-        )
-        
-        headers = {
-            "Authorization": f"Bearer {os.getenv('PERPLEXITY_API_KEY')}",
-            "Content-Type": "application/json"
-        }
-        
-        payload = {
-            "model": "sonar",
-            "messages": [
-                {"role": "user", "content": prompt}
-            ]
-        }
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                "https://api.perplexity.ai/chat/completions",
-                headers=headers,
-                json=payload,
-                timeout=aiohttp.ClientTimeout(total=120)
-            ) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    duration = time.time() - start_time
-                    print(f"   ✅ Completed: {name} ({duration:.1f}s)")
-                    return {
-                        'name': name,
-                        'content': data['choices'][0]['message']['content']
-                    }
-                else:
-                    print(f"   ❌ Error researching {name}: {response.status}")
-                    return None
-    
-    async def post_async(self, shared, prep_res, exec_res):
-        # Save result for ProcessNode to collect
-        if exec_res:
-            shared["result"] = exec_res
-
 
 class ProcessNode(AsyncParallelBatchNode):
     """Process all nodes in parallel - each gets its own query->research pipeline"""
@@ -243,26 +150,58 @@ class ProcessNode(AsyncParallelBatchNode):
     
     async def exec_async(self, node):
         """Execute the query->research pipeline for one node"""
-        # Create a fresh sub-flow for this node
-        generate = GenerateQueryNode()
-        research = ResearchQueryNode()
-        generate >> research
-        sub_flow = AsyncFlow(start=generate)
+        # Step 1: Generate query
+        print(f"   🔍 Generating query for: {node['name']}")
         
-        # Create a shared context for this sub-flow
-        sub_shared = {
-            "node": node,
-            "output_dir": None  # Will be passed through from parent
+        query_template = load_yaml_field(TEMPLATES_DIR / 'node_query.md', 'node_query_template')
+        prompt = load_yaml_field(PROMPTS_DIR / 'query.md', 'prompt').format(
+            node_name=node['name'],
+            node_description=node['description'],
+            query_template=query_template
+        )
+        
+        query_text = await call_openai(prompt)
+        if "Query: |" in query_text:
+            query_text = query_text.split("Query: |")[1].strip()
+        
+        # Step 2: Research query
+        print(f"   🚀 Started researching: {node['name']}")
+        start_time = time.time()
+        
+        step_template = load_yaml_field(TEMPLATES_DIR / 'algorithm_step.md', 'algorithm_step_template')
+        research_prompt = load_yaml_field(PROMPTS_DIR / 'research.md', 'prompt').format(
+            query=query_text,
+            step_template=step_template
+        )
+        
+        headers = {
+            "Authorization": f"Bearer {os.getenv(config.PERPLEXITY_API_KEY)}",
+            "Content-Type": "application/json"
         }
         
-        # Set params for the sub-flow
-        sub_flow.set_params({"node": node})
+        payload = {
+            "model": config.PERPLEXITY_MODEL,
+            "messages": [{"role": "user", "content": research_prompt}]
+        }
         
-        # Run the sub-flow
-        await sub_flow.run_async(sub_shared)
-        
-        # Return the result from the sub-flow
-        return sub_shared.get("result")
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                config.PERPLEXITY_URL,
+                headers=headers,
+                json=payload,
+                timeout=aiohttp.ClientTimeout(total=config.PERPLEXITY_TIMEOUT)
+            ) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    duration = time.time() - start_time
+                    print(f"   ✅ Completed: {node['name']} ({duration:.1f}s)")
+                    return {
+                        'name': node['name'],
+                        'content': data['choices'][0]['message']['content']
+                    }
+                else:
+                    print(f"   ❌ Error researching {node['name']}: {response.status}")
+                    return None
     
     async def post_async(self, shared, prep_res, exec_res_list):
         # Collect and save all results
