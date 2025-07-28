@@ -54,7 +54,7 @@ async def main():
     }
     
     # Create and run async flow
-    print("\n🚀 Running Paper2Code Pipeline...")
+    print("\n🚀 Running Paper2Code ...")
     flow = create_paper2code_flow()
     await flow.run_async(shared)
     

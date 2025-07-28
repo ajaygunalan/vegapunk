@@ -53,7 +53,7 @@ class BuildOverview(Node):
     """
     
     def prep(self, shared):
-        print("\n📚 BuildOverview: Generating complete algorithm overview...")
+        print("\n📚 Building overview: started ...")
         shared["build_start"] = time.time()
         return shared["paper_content"]
     
@@ -107,7 +107,7 @@ class BuildOverview(Node):
         shared["algorithm_name"] = exec_res['algorithm_name']
         
         duration = time.time() - shared["build_start"]
-        print(f"✅ BuildOverview: Completed in {duration:.1f}s with {len(exec_res['nodes_list'])} nodes")
+        print(f"✅ Building overview: completed in {duration:.1f}s and identified {len(exec_res['nodes_list'])} nodes")
 
 
 class ProcessNode(AsyncParallelBatchNode):
@@ -122,7 +122,7 @@ class ProcessNode(AsyncParallelBatchNode):
     """
     
     async def prep_async(self, shared):
-        print(f"\n🚀 ProcessNode: Launching {len(shared['nodes'])} parallel pipelines...")
+        print(f"\n🚀 Processing nodes: launching {len(shared['nodes'])} parallel pipelines...")
         shared["process_start"] = time.time()
         
         # Return list of nodes to process
@@ -131,7 +131,7 @@ class ProcessNode(AsyncParallelBatchNode):
     async def exec_async(self, node):
         """Execute the query->research pipeline for one node"""
         # Step 1: Generate query
-        print(f"   🔍 Generating query for: {node['name']}")
+        print(f"🔍 Generating query for: {node['name']}")
         
         base_dir = Path(__file__).parent.parent
         query_template = load_yaml_field(base_dir / 'templates' / 'node_query.md', 'node_query_template')
@@ -147,7 +147,7 @@ class ProcessNode(AsyncParallelBatchNode):
             query_text = query_text.split("Query: |")[1].strip()
         
         # Step 2: Research query
-        print(f"   🚀 Started researching: {node['name']}")
+        print(f"🚀 Researching for: {node['name']}")
         start_time = time.time()
         
         base_dir = Path(__file__).parent.parent
@@ -177,7 +177,7 @@ class ProcessNode(AsyncParallelBatchNode):
                 if response.status == 200:
                     data = await response.json()
                     duration = time.time() - start_time
-                    print(f"   ✅ Completed: {node['name']} ({duration:.1f}s)")
+                    print(f"✅ {node['name']} completed in {duration:.1f}s")
                     return {
                         'name': node['name'],
                         'content': data['choices'][0]['message']['content']
@@ -201,4 +201,4 @@ class ProcessNode(AsyncParallelBatchNode):
         
         shared["researched_nodes"] = saved_nodes
         duration = time.time() - shared["process_start"]
-        print(f"✅ ProcessNode: Completed! Processed {len(saved_nodes)} nodes in {duration:.1f}s")
+        print(f"✅ Processing nodes: completed! Processed {len(saved_nodes)} nodes in {duration:.1f}s")

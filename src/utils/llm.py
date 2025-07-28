@@ -7,7 +7,7 @@ from anthropic import Anthropic, AsyncAnthropic
 
 
 # Default model - can be changed to switch providers
-DEFAULT_MODEL = "gpt-4.1-mini"  # or "claude-3-5-sonnet"
+DEFAULT_MODEL = "claude-3-5-sonnet-20240620"
 
 
 class LLMBackend(ABC):
