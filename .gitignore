@@ -1,4 +1,9 @@
 .venv/
 __pycache__/
 output/
-.envother_repos_for_inspiration/PocketFlow-Tutorial-Codebase-Knowledge/
+.env
+other_repos_for_inspiration/
+logs/
+*.log
+.obsidian/
+.claude/
